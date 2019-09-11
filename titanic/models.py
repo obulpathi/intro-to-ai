@@ -1,8 +1,8 @@
 # linear algebra
-import numpy as np 
+import numpy as np
 
 # data processing
-import pandas as pd 
+import pandas as pd
 
 # data visualization
 import seaborn as sns
@@ -31,16 +31,16 @@ train_df.info()
 
 # features
 """
-survival:    Survival 
-PassengerId: Unique Id of a passenger. 
-pclass:    Ticket class     
-sex:    Sex     
-Age:    Age in years     
-sibsp:    # of siblings / spouses aboard the Titanic     
-parch:    # of parents / children aboard the Titanic     
-ticket:    Ticket number     
-fare:    Passenger fare     
-cabin:    Cabin number     
+survival:    Survival
+PassengerId: Unique Id of a passenger.
+pclass:    Ticket class
+sex:    Sex
+Age:    Age in years
+sibsp:    # of siblings / spouses aboard the Titanic
+parch:    # of parents / children aboard the Titanic
+ticket:    Ticket number
+fare:    Passenger fare
+cabin:    Cabin number
 embarked:    Port of Embarkation
 """
 
@@ -108,7 +108,7 @@ for dataset in data:
 train_df['not_alone'].value_counts()
 
 
-axes = sns.factorplot('relatives','Survived', 
+axes = sns.factorplot('relatives','Survived',
                       data=train_df, aspect = 2.5, )
 
 
@@ -167,19 +167,20 @@ for dataset in data:
 
 
 
-Converting Features:
+# converting Features
 train_df.info()
 
-Above you can see that ‘Fare’ is a float and we have to deal with 4 categorical features: Name, Sex, Ticket and Embarked. Lets investigate and transfrom one after another.
-Fare:
-Converting “Fare” from float to int64, using the “astype()” function pandas provides:
+# Above you can see that ‘Fare’ is a float and we have to deal with 4 categorical features: Name, Sex, Ticket and Embarked. Lets investigate and transfrom one after another.
+# Fare:
+# Converting “Fare” from float to int64, using the “astype()” function pandas provides:
 data = [train_df, test_df]
 
 for dataset in data:
     dataset['Fare'] = dataset['Fare'].fillna(0)
     dataset['Fare'] = dataset['Fare'].astype(int)
-Name:
-We will use the Name feature to extract the Titles from the Name, so that we can build a new feature out of that.
+
+# Name:
+# We will use the Name feature to extract the Titles from the Name, so that we can build a new feature out of that.
 data = [train_df, test_df]
 titles = {"Mr": 1, "Miss": 2, "Mrs": 3, "Master": 4, "Rare": 5}
 
@@ -198,21 +199,24 @@ for dataset in data:
     dataset['Title'] = dataset['Title'].fillna(0)
 train_df = train_df.drop(['Name'], axis=1)
 test_df = test_df.drop(['Name'], axis=1)
-Sex:
-Convert ‘Sex’ feature into numeric.
+
+# Sex:
+# Convert ‘Sex’ feature into numeric.
 genders = {"male": 0, "female": 1}
 data = [train_df, test_df]
 
 for dataset in data:
     dataset['Sex'] = dataset['Sex'].map(genders)
-Ticket:
+
+# Ticket
 train_df['Ticket'].describe()
 
-Since the Ticket attribute has 681 unique tickets, it will be a bit tricky to convert them into useful categories. So we will drop it from the dataset.
+# Since the Ticket attribute has 681 unique tickets, it will be a bit tricky to convert them into useful categories. So we will drop it from the dataset.
 train_df = train_df.drop(['Ticket'], axis=1)
 test_df = test_df.drop(['Ticket'], axis=1)
-Embarked:
-Convert ‘Embarked’ feature into numeric.
+
+# Embarked
+# Convert ‘Embarked’ feature into numeric.
 ports = {"S": 0, "C": 1, "Q": 2}
 data = [train_df, test_df]
 
@@ -220,10 +224,11 @@ for dataset in data:
     dataset['Embarked'] = dataset['Embarked'].map(ports)
 
 
-Creating Categories:
-We will now create categories within the following features:
-Age:
-Now we need to convert the ‘age’ feature. First we will convert it from float into integer. Then we will create the new ‘AgeGroup” variable, by categorizing every age into a group. Note that it is important to place attention on how you form these groups, since you don’t want for example that 80% of your data falls into group 1.
+# Creating Categories:
+# We will now create categories within the following features:
+# Age:
+# Now we need to convert the ‘age’ feature. First we will convert it from float into integer. Then we will create the new ‘AgeGroup” variable, by categorizing every age into a group. Note that it is important to place attention on how you form these groups, since you don’t want for example that 80% of your data falls into group 1.
+
 data = [train_df, test_df]
 for dataset in data:
     dataset['Age'] = dataset['Age'].astype(int)
@@ -238,8 +243,8 @@ for dataset in data:
 
 # let's see how it's distributed train_df['Age'].value_counts()
 
-Fare:
-For the ‘Fare’ feature, we need to do the same as with the ‘Age’ feature. But it isn’t that easy, because if we cut the range of the fare values into a few equally big categories, 80% of the values would fall into the first category. Fortunately, we can use sklearn “qcut()” function, that we can use to see, how we can form the categories.
+# Fare:
+# For the ‘Fare’ feature, we need to do the same as with the ‘Age’ feature. But it isn’t that easy, because if we cut the range of the fare values into a few equally big categories, 80% of the values would fall into the first category. Fortunately, we can use sklearn “qcut()” function, that we can use to see, how we can form the categories.
 train_df.head(10)
 
 data = [train_df, test_df]
@@ -252,87 +257,106 @@ for dataset in data:
     dataset.loc[(dataset['Fare'] > 99) & (dataset['Fare'] <= 250), 'Fare']   = 4
     dataset.loc[ dataset['Fare'] > 250, 'Fare'] = 5
     dataset['Fare'] = dataset['Fare'].astype(int)
-Creating new Features
-I will add two new features to the dataset, that I compute out of other features.
-1. Age times Class
+
+# Creating new Features
+# I will add two new features to the dataset, that I compute out of other features.
+# 1. Age times Class
 data = [train_df, test_df]
 for dataset in data:
-    dataset['Age_Class']= dataset['Age']* dataset['Pclass']
-2. Fare per Person
+    dataset['Age_Class']= dataset['Age'] * dataset['Pclass']
+
+# 2. Fare per Person
 for dataset in data:
     dataset['Fare_Per_Person'] = dataset['Fare']/(dataset['relatives']+1)
     dataset['Fare_Per_Person'] = dataset['Fare_Per_Person'].astype(int)
+
 # Let's take a last look at the training set, before we start training the models.
 train_df.head(10)
 
-Building Machine Learning Models
-Now we will train several Machine Learning models and compare their results. Note that because the dataset does not provide labels for their testing-set, we need to use the predictions on the training set to compare the algorithms with each other. Later on, we will use cross validation.
+# Building Machine Learning Models
+# Now we will train several Machine Learning models and compare their results. Note that because the dataset does not provide labels for their testing-set, we need to use the predictions on the training set to compare the algorithms with each other. Later on, we will use cross validation.
 X_train = train_df.drop("Survived", axis=1)
 Y_train = train_df["Survived"]
 X_test  = test_df.drop("PassengerId", axis=1).copy()
-Stochastic Gradient Descent (SGD):
+
+# Stochastic Gradient Descent (SGD):
 sgd = linear_model.SGDClassifier(max_iter=5, tol=None)
 sgd.fit(X_train, Y_train)
 Y_pred = sgd.predict(X_test)
-
 sgd.score(X_train, Y_train)
-
 acc_sgd = round(sgd.score(X_train, Y_train) * 100, 2)
-Random Forest:
+
+
+# Random Forest:
 random_forest = RandomForestClassifier(n_estimators=100)
 random_forest.fit(X_train, Y_train)
-
 Y_prediction = random_forest.predict(X_test)
-
 random_forest.score(X_train, Y_train)
 acc_random_forest = round(random_forest.score(X_train, Y_train) * 100, 2)
-Logistic Regression:
+
+
+# Logistic Regression:
 logreg = LogisticRegression()
 logreg.fit(X_train, Y_train)
-
 Y_pred = logreg.predict(X_test)
-
 acc_log = round(logreg.score(X_train, Y_train) * 100, 2)
-K Nearest Neighbor:
-# KNN knn = KNeighborsClassifier(n_neighbors = 3) knn.fit(X_train, Y_train)  Y_pred = knn.predict(X_test)  acc_knn = round(knn.score(X_train, Y_train) * 100, 2)
-Gaussian Naive Bayes:
-gaussian = GaussianNB() gaussian.fit(X_train, Y_train)  Y_pred = gaussian.predict(X_test)  acc_gaussian = round(gaussian.score(X_train, Y_train) * 100, 2)
-Perceptron:
+
+
+# K Nearest Neighbor:
+KNN knn = KNeighborsClassifier(n_neighbors = 3)
+knn.fit(X_train, Y_train)
+Y_pred = knn.predict(X_test)
+acc_knn = round(knn.score(X_train, Y_train) * 100, 2)
+
+
+# Gaussian Naive Bayes:
+gaussian = GaussianNB()
+gaussian.fit(X_train, Y_train)
+Y_pred = gaussian.predict(X_test)
+acc_gaussian = round(gaussian.score(X_train, Y_train) * 100, 2)
+
+
+# Perceptron:
 perceptron = Perceptron(max_iter=5)
 perceptron.fit(X_train, Y_train)
-
 Y_pred = perceptron.predict(X_test)
-
 acc_perceptron = round(perceptron.score(X_train, Y_train) * 100, 2)
-Linear Support Vector Machine:
+
+
+# Linear Support Vector Machine
 linear_svc = LinearSVC()
 linear_svc.fit(X_train, Y_train)
-
 Y_pred = linear_svc.predict(X_test)
-
 acc_linear_svc = round(linear_svc.score(X_train, Y_train) * 100, 2)
-Decision Tree
-decision_tree = DecisionTreeClassifier() decision_tree.fit(X_train, Y_train)  Y_pred = decision_tree.predict(X_test)  acc_decision_tree = round(decision_tree.score(X_train, Y_train) * 100, 2)
-Which is the best Model ?
+
+
+# Decision Tree
+decision_tree = DecisionTreeClassifier()
+decision_tree.fit(X_train, Y_train)
+Y_pred = decision_tree.predict(X_test)
+acc_decision_tree = round(decision_tree.score(X_train, Y_train) * 100, 2)
+
+
+# Which is the best Model ?
 results = pd.DataFrame({
-    'Model': ['Support Vector Machines', 'KNN', 'Logistic Regression', 
-              'Random Forest', 'Naive Bayes', 'Perceptron', 
-              'Stochastic Gradient Decent', 
+    'Model': ['Support Vector Machines', 'KNN', 'Logistic Regression',
+              'Random Forest', 'Naive Bayes', 'Perceptron',
+              'Stochastic Gradient Decent',
               'Decision Tree'],
-    'Score': [acc_linear_svc, acc_knn, acc_log, 
-              acc_random_forest, acc_gaussian, acc_perceptron, 
+    'Score': [acc_linear_svc, acc_knn, acc_log,
+              acc_random_forest, acc_gaussian, acc_perceptron,
               acc_sgd, acc_decision_tree]})
 result_df = results.sort_values(by='Score', ascending=False)
 result_df = result_df.set_index('Score')
 result_df.head(9)
 
-As we can see, the Random Forest classifier goes on the first place. But first, let us check, how random-forest performs, when we use cross validation.
-K-Fold Cross Validation:
-K-Fold Cross Validation randomly splits the training data into K subsets called folds. Let’s image we would split our data into 4 folds (K = 4). Our random forest model would be trained and evaluated 4 times, using a different fold for evaluation everytime, while it would be trained on the remaining 3 folds.
-The image below shows the process, using 4 folds (K = 4). Every row represents one training + evaluation process. In the first row, the model get’s trained on the first, second and third subset and evaluated on the fourth. In the second row, the model get’s trained on the second, third and fourth subset and evaluated on the first. K-Fold Cross Validation repeats this process till every fold acted once as an evaluation fold.
+# As we can see, the Random Forest classifier goes on the first place. But first, let us check, how random-forest performs, when we use cross validation.
+# K-Fold Cross Validation
+# K-Fold Cross Validation randomly splits the training data into K subsets called folds. Let’s image we would split our data into 4 folds (K = 4). Our random forest model would be trained and evaluated 4 times, using a different fold for evaluation everytime, while it would be trained on the remaining 3 folds.
+# The image below shows the process, using 4 folds (K = 4). Every row represents one training + evaluation process. In the first row, the model get’s trained on the first, second and third subset and evaluated on the fourth. In the second row, the model get’s trained on the second, third and fourth subset and evaluated on the first. K-Fold Cross Validation repeats this process till every fold acted once as an evaluation fold.
 
-The result of our K-Fold Cross Validation example would be an array that contains 4 different scores. We then need to compute the mean and the standard deviation for these scores.
-The code below perform K-Fold Cross Validation on our random forest model, using 10 folds (K = 10). Therefore it outputs an array with 10 different scores.
+# The result of our K-Fold Cross Validation example would be an array that contains 4 different scores. We then need to compute the mean and the standard deviation for these scores.
+# The code below perform K-Fold Cross Validation on our random forest model, using 10 folds (K = 10). Therefore it outputs an array with 10 different scores.
 from sklearn.model_selection import cross_val_score
 rf = RandomForestClassifier(n_estimators=100)
 scores = cross_val_score(rf, X_train, Y_train, cv=10, scoring = "accuracy")
@@ -340,27 +364,26 @@ print("Scores:", scores)
 print("Mean:", scores.mean())
 print("Standard Deviation:", scores.std())
 
-This looks much more realistic than before. Our model has a average accuracy of 82% with a standard deviation of 4 %. The standard deviation shows us, how precise the estimates are .
-This means in our case that the accuracy of our model can differ + — 4%.
-I think the accuracy is still really good and since random forest is an easy to use model, we will try to increase it’s performance even further in the following section.
-Random Forest
-What is Random Forest ?
-Random Forest is a supervised learning algorithm. Like you can already see from it’s name, it creates a forest and makes it somehow random. The „forest“ it builds, is an ensemble of Decision Trees, most of the time trained with the “bagging” method. The general idea of the bagging method is that a combination of learning models increases the overall result.
-To say it in simple words: Random forest builds multiple decision trees and merges them together to get a more accurate and stable prediction.
-One big advantage of random forest is, that it can be used for both classification and regression problems, which form the majority of current machine learning systems. With a few exceptions a random-forest classifier has all the hyperparameters of a decision-tree classifier and also all the hyperparameters of a bagging classifier, to control the ensemble itself.
-The random-forest algorithm brings extra randomness into the model, when it is growing the trees. Instead of searching for the best feature while splitting a node, it searches for the best feature among a random subset of features. This process creates a wide diversity, which generally results in a better model. Therefore when you are growing a tree in random forest, only a random subset of the features is considered for splitting a node. You can even make trees more random, by using random thresholds on top of it, for each feature rather than searching for the best possible thresholds (like a normal decision tree does).
-Below you can see how a random forest would look like with two trees:
+# This looks much more realistic than before. Our model has a average accuracy of 82% with a standard deviation of 4 %. The standard deviation shows us, how precise the estimates are .
+# This means in our case that the accuracy of our model can differ + — 4%.
+# I think the accuracy is still really good and since random forest is an easy to use model, we will try to increase it’s performance even further in the following section.
 
+"""
 Feature Importance
 Another great quality of random forest is that they make it very easy to measure the relative importance of each feature. Sklearn measure a features importance by looking at how much the treee nodes, that use that feature, reduce impurity on average (across all trees in the forest). It computes this score automaticall for each feature after training and scales the results so that the sum of all importances is equal to 1. We will acces this below:
+"""
+
 importances = pd.DataFrame({'feature':X_train.columns,'importance':np.round(random_forest.feature_importances_,3)})
 importances = importances.sort_values('importance',ascending=False).set_index('feature')
 importances.head(15)
 
 importances.plot.bar()
 
+"""
 Conclusion:
 not_alone and Parch doesn’t play a significant role in our random forest classifiers prediction process. Because of that I will drop them from the dataset and train the classifier again. We could also remove more or less features, but this would need a more detailed investigation of the features effect on our model. But I think it’s just fine to remove only Alone and Parch.
+"""
+
 train_df  = train_df.drop("not_alone", axis=1)
 test_df  = test_df.drop("not_alone", axis=1)
 
@@ -377,15 +400,20 @@ random_forest.score(X_train, Y_train)
 
 acc_random_forest = round(random_forest.score(X_train, Y_train) * 100, 2)
 print(round(acc_random_forest,2,), "%")
-92.82%
+
+"""
 Our random forest model predicts as good as it did before. A general rule is that, the more features you have, the more likely your model will suffer from overfitting and vice versa. But I think our data looks fine for now and hasn't too much features.
 There is also another way to evaluate a random-forest classifier, which is probably much more accurate than the score we used before. What I am talking about is the out-of-bag samples to estimate the generalization accuracy. I will not go into details here about how it works. Just note that out-of-bag estimate is as accurate as using a test set of the same size as the training set. Therefore, using the out-of-bag error estimate removes the need for a set aside test set.
 print("oob score:", round(random_forest.oob_score_, 4)*100, "%")
 oob score: 81.82 %
 Now we can start tuning the hyperameters of random forest.
+"""
+
+"""
 Hyperparameter Tuning
 Below you can see the code of the hyperparamter tuning for the parameters criterion, min_samples_leaf, min_samples_split and n_estimators.
 I put this code into a markdown cell and not into a code cell, because it takes a long time to run it. Directly underneeth it, I put a screenshot of the gridsearch's output.
+
 param_grid = { "criterion" : ["gini", "entropy"], "min_samples_leaf" : [1, 5, 10, 25, 50, 70], "min_samples_split" : [2, 4, 10, 12, 16, 18, 25, 35], "n_estimators": [100, 400, 700, 1000, 1500]}
 from sklearn.model_selection import GridSearchCV, cross_val_score
 rf = RandomForestClassifier(n_estimators=100, max_features='auto', oob_score=True, random_state=1, n_jobs=-1)
@@ -395,13 +423,13 @@ clf.bestparams
 
 Test new Parameters:
 # Random Forest
-random_forest = RandomForestClassifier(criterion = "gini", 
-                                       min_samples_leaf = 1, 
-                                       min_samples_split = 10,   
-                                       n_estimators=100, 
-                                       max_features='auto', 
-                                       oob_score=True, 
-                                       random_state=1, 
+random_forest = RandomForestClassifier(criterion = "gini",
+                                       min_samples_leaf = 1,
+                                       min_samples_split = 10,
+                                       n_estimators=100,
+                                       max_features='auto',
+                                       oob_score=True,
+                                       random_state=1,
                                        n_jobs=-1)
 
 random_forest.fit(X_train, Y_train)
@@ -502,3 +530,4 @@ We started with the data exploration where we got a feeling for the dataset, che
 Below you can see a before and after picture of the “train_df” dataframe:
 
 Of course there is still room for improvement, like doing a more extensive feature engineering, by comparing and plotting the features against each other and identifying and removing the noisy features. Another thing that can improve the overall result on the kaggle leaderboard would be a more extensive hyperparameter tuning on several machine learning models. You could also do some ensemble learning.
+"""
