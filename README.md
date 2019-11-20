@@ -9,7 +9,7 @@
 ## Neural Networks
 * Multi-layered neural nets
 * Learning problem
-* Sigmoid & ReLU activation functions
+* ReLU activation functions
 * Softmax function
 * Loss function
 * Calculas (aka backpropagation)
