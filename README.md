@@ -1,30 +1,33 @@
 # Introduction to Artificial Intelligence
 
-## Neurons
+## Neurons (Theory)
 * Real-life decission making process
 * Neuron
 * Step activation function
 * Universality of neurons
 
-## Neural Networks
-* Multi-layered neural nets
+## Tensors
+* Basics
+* Storage
+
+## Learning
+* Temperature conversion
 * Learning problem
-* ReLU activation functions
-* Softmax function
 * Loss function
 * Calculas (aka backpropagation)
 * Learning the weights & biases
 
-## Backpropagation
+## MNIST & FMNIST
+* ReLU activation functions
+* Softmax function
+* Multi-layered neural nets
+* Neural Networks module
 
-## Optimizer function
-
-## Cross-entropy cost function
-
-## Overfitting & Regularization
-
-## Weight Initilization
-
-## Hyperparameters
-
-## Gradient Descent & its Descendents
+## Neural Networks
+* Backpropagation
+* Optimizer function
+* Cross-entropy cost function
+* Overfitting & Regularization
+* Weight Initilization
+* Hyperparameters
+* Gradient Descent & its Descendents
