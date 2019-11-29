@@ -31,3 +31,9 @@
 * Weight Initilization
 * Hyperparameters
 * Gradient Descent & its Descendents
+
+## CNNs
+
+## LSTMs
+
+## GANs
