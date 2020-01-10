@@ -15,8 +15,8 @@
 * If you get any error refer to this webpage: https://virtualenvwrapper.readthedocs.io/en/latest/install.html#shell-startup-file
 
 ##  Virtualenv commands
-* create a new virtualenv: mkvirtualenv <env>
-* To enter the virtual env: workon <env>
+* create a new virtualenv: mkvirtualenv env
+* To enter the virtual env: workon env
 * exit from virtualenv: deactivate
 
 ## Install the requirements
