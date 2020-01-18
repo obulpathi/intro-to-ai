@@ -37,3 +37,9 @@
 ## LSTMs
 
 ## GANs
+
+## References
+* Neural Networks & Deep Learning: http://neuralnetworksanddeeplearning.com/index.html
+* Deep Learning with PyTorch: https://pytorch.org/deep-learning-with-pytorch
+* PyTorch with Examples: https://pytorch.org/tutorials/beginner/pytorch_with_examples.html
+* PyTorch Tutorials: https://pytorch.org/tutorials/index.html
